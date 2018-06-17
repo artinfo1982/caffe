@@ -1,12 +1,20 @@
-# Caffe
+# cdcaffe
+Forked from raw offical caffe, modified to support faster-rcnn, ssd.     
 
-基于官方原版caffe，修改后支持faster-rcnn、ssd。   
-
-官方原版caffe：   
+raw offical caffe：   
 https://github.com/BVLC/caffe
-
 faster-rcnn：   
 https://github.com/ShaoqingRen/faster_rcnn
-
 ssd：   
 https://github.com/weiliu89/caffe/tree/ssd
+
+**install**
+```shell
+git clone git@github.com:artinfo1982/cdcaffe.git
+cd cdcaffe
+mkdir build
+cd build
+cmake ..
+make all
+make install
+```

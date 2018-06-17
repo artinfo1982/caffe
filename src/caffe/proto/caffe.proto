@@ -420,6 +420,15 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
+
+  // ------------------- FasterRCNN BEGIN -------------------
+  optional BoxAnnotatorOHEMParameter box_annotator_ohem_param = 90001;
+  optional PSROIPoolingParameter psroi_pooling_param = 90002;
+  optional ROIPoolingParameter roi_pooling_param = 90003;
+  optional SmoothL1LossParameter smooth_l1_loss_param = 90004;
+  optional MILDataParameter mil_data_param = 0x004d4944; //"MID"
+  optional MILParameter mil_param = 0x004d494c; //"MIL"
+  // ------------------- FasterRCNN END -------------------
 }
 
 // Message that stores parameters used to apply transformation
@@ -464,6 +473,10 @@ message LossParameter {
     BATCH_SIZE = 2;
     // Do not normalize the loss.
     NONE = 3;
+    // ------------------- FasterRCNN BEGIN -------------------
+    // Divide by pre-fixed normalizer
+    PRE_FIXED = 4;
+    // ------------------- FasterRCNN END -------------------
   }
   // For historical reasons, the default normalization for
   // SigmoidCrossEntropyLoss is BATCH_SIZE and *not* VALID.
@@ -472,6 +485,10 @@ message LossParameter {
   // is not specified, then setting this to false will be equivalent to
   // normalization = BATCH_SIZE to be consistent with previous behavior.
   optional bool normalize = 2;
+  // ------------------- FasterRCNN BEGIN -------------------
+  //pre-fixed normalizer
+  optional float pre_fixed_normalizer = 4 [default = 1];
+  // ------------------- FasterRCNN END -------------------
 }
 
 // Messages that store parameters used by individual layer types follow, in
@@ -537,6 +554,13 @@ message BatchNormParameter {
   // zero.
   optional float eps = 3 [default = 1e-5];
 }
+
+// ------------------- FasterRCNN BEGIN -------------------
+message BoxAnnotatorOHEMParameter {
+  required uint32 roi_per_img = 1; // number of rois for training
+  optional int32 ignore_label = 2 [default = -1]; // ignore_label in scoring
+}
+// ------------------- FasterRCNN END -------------------
 
 message BiasParameter {
   // The first axis of bottom[0] (the first input Blob) along which to apply
@@ -689,6 +713,9 @@ message DataParameter {
 
 message DropoutParameter {
   optional float dropout_ratio = 1 [default = 0.5]; // dropout ratio
+  // ------------------- FasterRCNN BEGIN -------------------
+  optional bool scale_train = 2 [default = true];  // scale train or test phase
+  // ------------------- FasterRCNN END -------------------
 }
 
 // DummyDataLayer fills any number of arbitrarily shaped blobs with random
@@ -945,6 +972,14 @@ message PowerParameter {
   optional float shift = 3 [default = 0.0];
 }
 
+// ------------------- FasterRCNN BEGIN -------------------
+message PSROIPoolingParameter {
+   required float spatial_scale = 1; 
+   required int32 output_dim = 2; // output channel number
+   required int32 group_size = 3; // number of groups to encode position-sensitive score maps
+}
+// ------------------- FasterRCNN END -------------------
+
 message PythonParameter {
   optional string module = 1;
   optional string layer = 2;
@@ -1085,6 +1120,19 @@ message ReshapeParameter {
   optional int32 num_axes = 3 [default = -1];
 }
 
+// ------------------- FasterRCNN BEGIN -------------------
+// Message that stores parameters used by ROIPoolingLayer
+message ROIPoolingParameter {
+  // Pad, kernel size, and stride are all given as a single value for equal
+  // dimensions in height and width or as Y, X pairs.
+  optional uint32 pooled_h = 1 [default = 0]; // The pooled output height
+  optional uint32 pooled_w = 2 [default = 0]; // The pooled output width
+  // Multiplicative spatial scale factor to translate ROI coords from their
+  // input scale to the scale used when pooling
+  optional float spatial_scale = 3 [default = 1];
+}
+// ------------------- FasterRCNN END -------------------
+
 message ScaleParameter {
   // The first axis of bottom[0] (the first input Blob) along which to apply
   // bottom[1] (the second input Blob).  May be negative to index from the end
@@ -1142,6 +1190,15 @@ message SliceParameter {
   optional uint32 slice_dim = 1 [default = 1];
 }
 
+// ------------------- FasterRCNN BEGIN -------------------
+message SmoothL1LossParameter {
+  // SmoothL1Loss(x) =
+  //   0.5 * (sigma * x) ** 2    -- if x < 1.0 / sigma / sigma
+  //   |x| - 0.5 / sigma / sigma -- otherwise
+  optional float sigma = 1 [default = 1];
+}
+// ------------------- FasterRCNN END -------------------
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1189,6 +1246,17 @@ message ThresholdParameter {
   optional float threshold = 1 [default = 0]; // Strictly positive values
 }
 
+// ------------------- FasterRCNN BEGIN -------------------
+// Message that stores parameters used by MILLayer
+message MILParameter {
+  enum MILType {
+    MAX = 0;
+    NOR = 1;
+  }
+  optional MILType type = 1 [default = MAX]; // The MIL method
+}
+// ------------------- FasterRCNN END -------------------
+
 message WindowDataParameter {
   // Specify the data source.
   optional string source = 1;
@@ -1221,6 +1289,31 @@ message WindowDataParameter {
   // append root_folder to locate images
   optional string root_folder = 13 [default = ""];
 }
+
+// ------------------- FasterRCNN BEGIN -------------------
+message MILDataParameter {
+  // Specify the data source.
+  optional string source = 1;
+  // Number of scales for each image
+  optional uint32 num_scales = 2 [default = 1];
+  // Side length ratio between neighbouring scales
+  optional float scale_factor = 6 [default = 1];
+  // Number of channels in the image
+  optional uint32 channels = 4 [default = 3];
+  // Specify the number of images per batch
+  optional uint32 images_per_batch = 3;
+  // Specify the number of classes
+  optional uint32 n_classes = 5;
+  // specify the box_dir and label_dir
+  optional string label_file = 7;
+  // Root directory which contains all the images
+  optional string root_dir = 11;
+  // Extention for the file
+  optional string ext = 12;
+  // To randomize or not
+  optional bool randomize = 13 [default = true];
+}
+// ------------------- FasterRCNN END -------------------
 
 message SPPParameter {
   enum PoolMethod {
