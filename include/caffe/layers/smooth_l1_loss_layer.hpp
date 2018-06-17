@@ -1,10 +1,17 @@
+// ------------------------------------------------------------------
+// Fast R-CNN
+// copyright (c) 2015 Microsoft
+// Licensed under The MIT License [see fast-rcnn/LICENSE for details]
+// Written by Ross Girshick
+// Modified by Wei Liu
+// ------------------------------------------------------------------
+
 #ifndef CAFFE_SMOOTH_L1_LOSS_LAYER_HPP_
 #define CAFFE_SMOOTH_L1_LOSS_LAYER_HPP_
 
 #include <vector>
 
 #include "caffe/blob.hpp"
-#include "caffe/common.hpp"
 #include "caffe/layer.hpp"
 #include "caffe/proto/caffe.pb.h"
 
@@ -13,10 +20,8 @@
 namespace caffe {
 
 /**
- * @brief SmoothL1LossLayer
- *
- * Fast R-CNN
- * Written by Ross Girshick
+ * @brief Computes the SmoothL1 loss as introduced in:@f$
+ *  Fast R-CNN, Ross Girshick, ICCV 2015.
  */
 template <typename Dtype>
 class SmoothL1LossLayer : public LossLayer<Dtype> {
@@ -30,9 +35,8 @@ class SmoothL1LossLayer : public LossLayer<Dtype> {
 
   virtual inline const char* type() const { return "SmoothL1Loss"; }
 
-  virtual inline int ExactNumBottomBlobs() const { return -1; }
   virtual inline int MinBottomBlobs() const { return 2; }
-  virtual inline int MaxBottomBlobs() const { return 4; }
+  virtual inline int MaxBottomBlobs() const { return 3; }
 
   /**
    * Unlike most loss layers, in the SmoothL1LossLayer we can backpropagate
@@ -43,6 +47,7 @@ class SmoothL1LossLayer : public LossLayer<Dtype> {
   }
 
  protected:
+  /// @copydoc SmoothL1LossLayer
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -55,9 +60,7 @@ class SmoothL1LossLayer : public LossLayer<Dtype> {
 
   Blob<Dtype> diff_;
   Blob<Dtype> errors_;
-  Blob<Dtype> ones_;
   bool has_weights_;
-  Dtype sigma2_;
 };
 
 }  // namespace caffe

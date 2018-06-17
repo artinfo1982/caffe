@@ -29,6 +29,10 @@ class LossLayer : public Layer<Dtype> {
   virtual void Reshape(
       const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top);
 
+  Dtype GetNormalizer(
+      const LossParameter_NormalizationMode normalization_mode,
+      const int outer_num, const int inner_num, const int valid_count);
+
   virtual inline int ExactNumBottomBlobs() const { return 2; }
 
   /**
