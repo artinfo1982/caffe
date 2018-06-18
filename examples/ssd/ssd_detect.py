@@ -2,6 +2,9 @@
 '''
 Detection with SSD
 In this example, we will load a SSD model and use it to detect objects.
+
+Usage:
+python /home/zxh/cdcaffe/examples/ssd/ssd_detect.py --labelmap_file '/home/zxh/cdcaffe/data/VOC0712/labelmap_voc.prototxt' --model_def '/home/zxh/cdcaffe/models/VGG_VOC0712_SSD_300x300_iter_120000_deploy.prototxt' --model_weights '/home/zxh/cdcaffe/models/VGG_VOC0712_SSD_300x300_iter_120000.caffemodel' --image_file '/home/zxh/test.jpg' --image_resize 300
 '''
 
 import os
@@ -10,7 +13,7 @@ import argparse
 import numpy as np
 from PIL import Image, ImageDraw
 # Make sure that caffe is on the python path:
-caffe_root = './'
+caffe_root = '/home/zxh/cdcaffe/'
 os.chdir(caffe_root)
 sys.path.insert(0, os.path.join(caffe_root, 'python'))
 import caffe
@@ -113,7 +116,7 @@ def main(args):
     result = detection.detect(args.image_file)
     print result
 
-    img = Image.open(args.image_file)
+    img = Image.open(args.image_file).convert('RGB')
     draw = ImageDraw.Draw(img)
     width, height = img.size
     print width, height
