@@ -18,3 +18,6 @@ cmake ..
 make all
 make install
 ```
+
+## **Train and Test**
+https://github.com/artinfo1982/demos/issues/8
