@@ -456,4 +456,16 @@ void caffe_gpu_rng_gaussian(const int n, const double mu, const double sigma,
       curandGenerateNormalDouble(Caffe::curand_generator(), r, n, mu, sigma));
 }
 
+template <>
+void caffe_gpu_axpy<bool> (int N, bool alpha, const bool* X, bool* Y) {}
+
+template <>
+void caffe_gpu_asum<bool> (int n, const bool* x, bool* y) {}
+
+template <>
+void caffe_gpu_scal<bool> (int N, bool alpha, bool* X) {}
+
+template <>
+void caffe_gpu_dot<bool> (int n, const bool* X, const bool* y, bool* out) {}
+
 }  // namespace caffe

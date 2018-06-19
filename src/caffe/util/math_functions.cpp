@@ -382,4 +382,21 @@ void caffe_cpu_scale<double>(const int n, const double alpha, const double *x,
   cblas_dscal(n, alpha, y, 1);
 }
 
+template <>
+void caffe_axpy<bool> (int N, bool alpha, const bool* X, bool* Y) {}
+
+template void caffe_copy<bool> (int N, const bool* X, bool* Y);
+
+template <>
+void caffe_scal<bool> (int N, bool alpha, bool* X) {}
+
+template <>
+bool caffe_cpu_asum<bool> (int n, const bool* x) {return true;}
+
+template <>
+bool caffe_cpu_dot<bool> (const int n, const bool* x, const bool* y);
+
+template <>
+bool caffe_cpu_strided_dot<bool> (int n, const bool* x, int incx, const bool* y, int incy) {return true;}
+
 }  // namespace caffe
