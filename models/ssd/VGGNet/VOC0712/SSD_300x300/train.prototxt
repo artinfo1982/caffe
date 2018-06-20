@@ -1131,7 +1131,8 @@ layer {
     decay_mult: 0
   }
   convolution_param {
-    num_output: 126
+    # 6 * (class + 1)
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1248,7 +1249,8 @@ layer {
     decay_mult: 0
   }
   convolution_param {
-    num_output: 126
+    # 4 * (class + 1)
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
@@ -1365,7 +1367,8 @@ layer {
     decay_mult: 0
   }
   convolution_param {
-    num_output: 126
+    # 4 * (class + 1)
+    num_output: 12
     pad: 1
     kernel_size: 3
     stride: 1
