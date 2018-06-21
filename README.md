@@ -22,6 +22,6 @@ make install
 
 ## **Train and Test**
 **SSD**   
-![SSD训练自己的数据](https://github.com/artinfo1982/demos/issues/8)   
+https://github.com/artinfo1982/demos/issues/8   
 **Faster-RCNN**   
-![Faster-RCNN训练自己的数据](https://github.com/artinfo1982/demos/issues/9)   
+https://github.com/artinfo1982/demos/issues/9   
