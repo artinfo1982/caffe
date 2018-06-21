@@ -21,7 +21,7 @@ make install
 ```
 
 ## **Train and Test**
-**SSD**
-https://github.com/artinfo1982/demos/issues/8
-**Faster-RCNN**
-https://github.com/artinfo1982/demos/issues/9
+**SSD**   
+![SSD训练自己的数据](https://github.com/artinfo1982/demos/issues/8)   
+**Faster-RCNN**   
+![Faster-RCNN训练自己的数据](https://github.com/artinfo1982/demos/issues/9)   
