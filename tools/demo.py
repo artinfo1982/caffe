@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-对data/demo下面的所有图片进行faster-rcnn自定义类别检测，假定只有车牌（licencePlate）这一种类别
+采用faster-rcnn自定义类别检测，假定只有车牌（licencePlate）这一种类别
 """
 
 import matplotlib
@@ -20,8 +20,8 @@ import sys
 import cv2
 import argparse
 
-CLASSES = ('__background__',
-           'licencePlate')
+CLASSES = ('__background__',  #这一行必须保留
+           'licencePlate')  #自定义类
 
 
 def vis_detections(im, class_name, dets, ax, thresh):
@@ -44,7 +44,7 @@ def vis_detections(im, class_name, dets, ax, thresh):
 
 
 def demo(net, image_name):
-    im_file = 'home/zxh/testimg/' + image_name
+    im_file = 'home/zxh/testimg/' + image_name #待测图片
     im = cv2.imread(im_file)
     scores, boxes = im_detect(net, im)
     CONF_THRESH = 0.8
@@ -53,7 +53,7 @@ def demo(net, image_name):
     fig, ax = plt.subplots(figsize=(12, 12))
     ax.imshow(im, aspect='equal')
     for cls_ind, cls in enumerate(CLASSES[1:]):
-        cls_ind += 1  # because we skipped background
+        cls_ind += 1  #忽略背景
         cls_boxes = boxes[:, 4 * cls_ind:4 * (cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
